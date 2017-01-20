@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+
+	<!-- PROPERTIES -->
+	<property name="APP_NAME" value="test" /><!-- 应用名称 -->
+	<if condition='isDefined("Runtime-Env")'>
+		<then>
+			<property name="LOG_ENV" value="${Runtime-Env}" />
+			<define name="CONFIG_EXISTS" class="ch.qos.logback.core.property.ResourceExistsPropertyDefiner">
+				<resource>META-INF/config/logback/log-${Runtime-Env}.properties</resource>
+			</define>
+			<if condition='p("CONFIG_EXISTS").equals("true")'>
+				<then>
+					<property resource="META-INF/config/logback/log-${Runtime-Env}.properties" />
+				</then>
+			</if>
+		</then>
+	</if>
+	<property name="LOG_HOME" value="${LOG_HOME:-/home/logs/${APP_NAME}}" /><!-- 应用日志目录 -->
+	<property name="FLAT_LOG_DIR" value="${FLAT_LOG_DIR:-false}" /><!-- 是否使用扁平的日志目录结构（即不为模块项目创建子日志目录），缺省为false  -->
+	<!--/ PROPERTIES -->
+	
+	<include resource="META-INF/config/logback/logback.xml" /><!-- 环境设置文件 -->
+	
+</configuration>
+ 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+	<!-- ROOT -->
+	<appender name="ROOT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${${APP_NAME}.appender.encoder.pattern:-%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n}</pattern>
+			<charset>${${APP_NAME}.appender.encoder.charset:-UTF-8}</charset>
+		</encoder>
+	</appender>
+	
+	<root level="${${APP_NAME}.logger.level:-INFO}">
+		<appender-ref ref="ROOT" />
+	</root>
+	<!--/ ROOT -->
+	
+	<!-- MODULES -->
+	<!-- <include resource="META-INF/config/logback/my-module.xml" /> -->
+	<!--/ MODULES -->
+
+	<!-- WEBAPP -->
+	<appender name="${APP_NAME}.webapp"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/webapp.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/webapp.log.${${APP_NAME}.webapp.appender.rollingPolicy.datePattern:-%d{yyyy-MM-dd}}
+			</fileNamePattern>
+			<maxHistory>${${APP_NAME}.webapp.appender.rollingPolicy.maxHistory:-60}</maxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${${APP_NAME}.webapp.appender.encoder.pattern:-%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n}</pattern>
+			<charset>${${APP_NAME}.webapp.appender.encoder.charset:-UTF-8}</charset>
+			<ImmediateFlush>${${APP_NAME}.webapp.appender.encoder.immediateFlush:-true}
+			</ImmediateFlush>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>${${APP_NAME}.webapp.appender.filter.level:-INFO}</level>
+		</filter>
+	</appender>
+
+	<logger name="netease.test" level="${${APP_NAME}.webapp.logger.level:-INFO}"
+		additivity="${${APP_NAME}.webapp.logger.additivity:-false}">
+		<appender-ref ref="${APP_NAME}.webapp" />
+	</logger>
+	<!--/ WEBAPP -->
+
+</included>
+ 
